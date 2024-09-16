@@ -14,7 +14,8 @@ var gameCollection *mongo.Collection
 
 // Initialize MongoDB connection
 func InitDB() {
-	clientOptions := options.Client().ApplyURI("mongodb://root:password@192.168.1.151:27018") // MongoDB URI
+
+	clientOptions := options.Client().ApplyURI("mongodb://root:password@192.168.1.151:27018/tic-tac-toe") // MongoDB URI
 	client, err := mongo.NewClient(clientOptions)
 	if err != nil {
 		log.Fatal(err)
