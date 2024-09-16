@@ -26,7 +26,8 @@ services:
     depends_on:
       - mongo              # Ensure MongoDB starts before backend
     environment:
-      - DB_URL=mongodb://root:password@mongo:27017/tic-tac-toe  # MongoDB connection
+      # - DB_URL=mongodb://root:password@mongo:27017/tic-tac-toe  # MongoDB connection
+      - DB_URL = mongodb://root:password@192.168.1.151:27018/tic-tac-toe  # MongoDB connection
     networks:
       - app-network
 
