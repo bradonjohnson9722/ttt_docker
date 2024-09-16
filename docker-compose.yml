@@ -1,0 +1,51 @@
+version: '3.8'
+
+services:
+  # MongoDB Service
+  mongo:
+    image: mongo:6.0   # Use the official MongoDB image
+    container_name: mongo-container
+    ports:
+      - "27018:27017"   # Expose MongoDB on host port 27017
+    volumes:
+      - mongo_data:/data/db  # Persist MongoDB data
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=root
+      - MONGO_INITDB_ROOT_PASSWORD=password
+    networks:
+      - app-network
+
+  # Backend (Gin) Service
+  backend:
+    image: brandonjohnson9722/backend-image:latest
+    build:
+      context: ./backend   # Dockerfile located in the backend directory
+    container_name: bd-container
+    ports:
+      - "1972:1972"        # Expose backend on host port 8080
+    depends_on:
+      - mongo              # Ensure MongoDB starts before backend
+    environment:
+      - DB_URL=mongodb://root:password@mongo:27017/tic-tac-toe  # MongoDB connection
+    networks:
+      - app-network
+
+  # Frontend (React) Service
+  frontend:
+    image: brandonjohnson9722/frontend-image:latest
+    build:
+      context: ./frontend  # Dockerfile located in the frontend directory
+    container_name: bf-container
+    ports:
+      - "1975:80"          # Expose frontend on host port 3000 (HTTP default is 80)
+    networks:
+      - app-network
+
+# Volumes for persisting data
+volumes:
+  mongo_data:
+
+# Network definition for inter-container communication
+networks:
+  app-network:
+    driver: bridge
