@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import Board from './components/Board';
+import { GoogleLogin } from '@react-oauth/google';
 import { startGame, makeMove } from './api';
-
+import axios from 'axios';
 function App() {
+
   const [game, setGame] = useState(null);
   const [status, setStatus] = useState('');
+  const [name, setName] = useState("");
 
   // Start a new game when the component mounts
   useEffect(() => {
@@ -14,6 +17,7 @@ function App() {
       setStatus('Game ongoing');
     }
     initGame();
+    getQueryParams();
   }, []);
 
   // Handle player moves
@@ -25,11 +29,44 @@ function App() {
     }
   };
 
+  const handleLogin = () => {
+    window.location.href = 'http://192.168.1.151:1972/auth/google/login';
+  };
+  const logOut = () => {
+    const googleLogoutUrl = 'https://accounts.google.com/Logout';
+    window.location.href = googleLogoutUrl;
+    window.location.href = 'http://192.168.1.151:1975';
+
+  }
+  function getQueryParams() {
+    var url_string = window.location;
+    if (url_string.search) {
+      var url = decodeURIComponent(url_string.search.slice(1))
+      var url_json = JSON.parse(url);
+
+      url && setName(url_json.name);
+      return {
+        name: url_json.name,
+      };
+    }
+    return 1;
+
+  }
+
+
+
   // Render the board and game status
   return (
     <div className="App">
       <h1>Tic-Tac-Toe</h1>
-      {game ? (
+      <button onClick={handleLogin} style={{ display: name ? "none" : "block" }}>
+        Login with Google
+      </button>
+      <button onClick={logOut} style={{ display: name ? "block" : "none" }}>
+        Logout
+      </button>
+      <p>{name ? "Welcome to" + name : ""}</p>
+      {(game && name) ? (
         <>
           <Board board={game.board} onClick={handleMove} />
           <p>Status: {status}</p>
