@@ -7,31 +7,42 @@ import (
 	"io/ioutil"
 	"log"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/go-redis/redis/v8"
+	"github.com/joho/godotenv"
 	"github.com/streadway/amqp"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
 
 var (
+	googleOauthConfig = &oauth2.Config{}
+	randomState       = "random" // You should generate a random state for security
+)
+
+func main() {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loa88888888888888888888888888888888888888888888888888888888888ding .env file")
+	}
+
 	googleOauthConfig = &oauth2.Config{
 		RedirectURL:  "http://localhost:1978/auth/google/callback",
-		ClientID:     "280247170993-pj0gv5dmpj8l6cukvdokisdgel4diva0.apps.googleusercontent.com",
-		ClientSecret: "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",
+		ClientID:     os.Getenv("ClientID"),
+		ClientSecret: os.Getenv("ClientSecret"),
 		Scopes: []string{
 			"https://www.googleapis.com/auth/userinfo.email",
 			"https://www.googleapis.com/auth/userinfo.profile",
 		},
 		Endpoint: google.Endpoint,
 	}
-	randomState = "random" // You should generate a random state for security
-)
 
-func main() {
+	fmt.Println("Client ID8888888888888888:", os.Getenv("ClientID"))
+	fmt.Println("Client Secret9999999999999999:", os.Getenv("ClientSecret"))
 
 	// Initialize Gin router
 	router := gin.Default()
