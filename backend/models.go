@@ -11,4 +11,5 @@ type Game struct {
 	ID     string    `json:"id" bson:"id"`         // Unique game ID
 	Board  [9]string `json:"board" bson:"board"`   // 3x3 Tic-Tac-Toe board
 	Status string    `json:"status" bson:"status"` // "ongoing", "won", "draw"
+	Flag   bool
 }

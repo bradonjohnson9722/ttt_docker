@@ -14,7 +14,21 @@ services:
       - MONGO_INITDB_ROOT_PASSWORD=password
     networks:
       - app-network
+  
 
+  rabbitmq:
+    image: rabbitmq:management
+    container_name: br-container
+    ports:
+      - "1001:5672"  # RabbitMQ port
+      - "15673:15672"  # RabbitMQ Management UI
+    environment:
+      RABBITMQ_DEFAULT_USER: admin
+      RABBITMQ_DEFAULT_PASS: admin
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq  # Persistent data
+    networks:
+      - app-network
   # Backend (Gin) Service
   backend:
     image: brandonjohnson9722/backend-image:latest
@@ -28,6 +42,18 @@ services:
     environment:
       # - DB_URL=mongodb://root:password@mongo:27017/tic-tac-toe  # MongoDB connection
       - DB_URL = mongodb://root:password@192.168.1.151:27018/tic-tac-toe  # MongoDB connection
+    networks:
+      - app-network
+
+
+  # Backend-sso (Gin) Service
+  backend-sso:
+    image: brandonjohnson9722/backend-sso-image:latest
+    build:
+      context: ./backend_sso   # Dockerfile located in the backend directory
+    container_name: bs-container
+    ports:
+      - "1978:1978"        # Expose backend on host port 8080
     networks:
       - app-network
 
@@ -45,6 +71,7 @@ services:
 # Volumes for persisting data
 volumes:
   mongo_data:
+  rabbitmq-data:
 
 # Network definition for inter-container communication
 networks:

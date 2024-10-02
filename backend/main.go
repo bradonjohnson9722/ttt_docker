@@ -1,13 +1,17 @@
 package main
 
 import (
+	"context"
 	"log"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 )
 
+var ctx = context.Background()
+
 func main() {
+
 	// Initialize MongoDB connection
 	InitDB()
 
