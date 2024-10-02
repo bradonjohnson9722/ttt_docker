@@ -1,3 +1,5 @@
 # Node modules
 frontend/node_modules
 mongo-data
+backend_sso/.env
+docker-compose.yml
