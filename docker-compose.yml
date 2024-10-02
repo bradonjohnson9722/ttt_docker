@@ -54,9 +54,6 @@ services:
     container_name: bs-container
     ports:
       - "1978:1978"        # Expose backend on host port 8080
-    environment:
-      - GOOGLE_CLIENT_ID=280247170993-pj0gv5dmpj8l6cukvdokisdgel4diva0.apps.googleusercontent.com # Replace with your actual values
-      - GOOGLE_CLIENT_SECRET=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
     networks:
       - app-network
 
